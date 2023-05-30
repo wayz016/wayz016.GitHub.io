@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工资计算器</title>
+    <style>
+		
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto; /* 居中对齐 */
+        padding: 0;
+        background-color: #E6E6FA;
+        font-size: 18px; /* 默认字体大小 */
+      }
+		
+      
+      h1 {
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 18px; /* 大屏幕设备字体大小 */
+      }
+		
+		h2 {
+	   text-align: center;	
+       font-size: 18px; /* 今天赚了大屏幕设备字体大小 */
+      }
+      
+      p {
+		text-align: center;	  
+        font-size: 24px; /* 大屏幕设备字体大小 */
+        margin-bottom: 20px;
+        color: #333;
+      }
+		
+	  p3 {
+        text-align: center;	
+        font-size: 19px; /* 今天赚了大屏幕设备字体大小 */
+        color: #333;
+      }
+      
+      span {
+        font-weight: bold;
+        color: #007bff;
+      }
+      
+      #countdown {
+        font-weight: bold;
+        color: #333;
+      }
+      
+      #earned-money {
+        font-weight: bold;
+        color: #FF0000;
+      }
+
+      /* 自适应页面大小 */
+      @media (max-width: 230px) {
+        h1 {
+          font-size: 24px;
+        }
+
+        p {
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1> </h1>
+    
+    <div style="max-width: 230px; margin: 0 auto;">
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>今天赚了</p>
+      <p>————💰————</p>
+<p>￥<span id="earned-money">0.00</span> 元</p>
+<p>💴</p>	
+<p>距离下班</p>
+<p>————🕕————</p>
+<p><span id="countdown"></span></p>
+    </div>
+
+    <script>
+      let dailySalary = prompt("请输入日薪：");
+      let earnedMoney = 0;
+      let countdownInterval;
+
+      function updateCountdown() {
+        const now = new Date();
+        const endOfWork = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
+        const timeLeft = endOfWork.getTime() - now.getTime();
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          document.getElementById("countdown").textContent = "不要加班赶紧跑！";
+        } else {
+          const hoursLeft = Math.floor(timeLeft / (1000 * 60 * 60));
+          const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+          document.getElementById("countdown").textContent =`${hoursLeft}时${minutesLeft}分${secondsLeft}秒`;
+          
+          updateEarnedMoney();
+        }
+      }
+      
+      function updateEarnedMoney() {
+        const now = new Date();
+        const startOfWork = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+        const timeWorked = now.getTime() - startOfWork.getTime();
+        
+        if (timeWorked >= 0) {
+          const moneyEarned = (timeWorked / (1000 * 60 * 60)) * dailySalary;
+          document.getElementById("earned-money").textContent = moneyEarned.toFixed(2);
+        }
+      }
+
+      countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+  </body>
+</html>
